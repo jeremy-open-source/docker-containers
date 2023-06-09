@@ -1,0 +1,18 @@
+services:
+  - docker:dind
+
+stages:
+  - child-pipelines
+
+ansible-docker:
+  stage: child-pipelines
+  variables:
+    CHILD_PIPELINE_EXECUTION_CONTEXT: "ansible-docker"
+  trigger:
+    include: .sub-gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "ansible-docker"
+    - changes:
+        - ansible-docker/**/*

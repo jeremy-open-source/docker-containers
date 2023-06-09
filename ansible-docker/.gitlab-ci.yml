@@ -1,0 +1,28 @@
+services:
+  - docker:dind
+
+stages:
+  - build
+
+build:
+  stage: build
+  retry: 0
+  image: docker:20
+  before_script:
+    - cd ansible-docker
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - export IMAGE_SUFFIX=$(basename $(pwd))
+    - echo "IMAGE_SUFFIX=${IMAGE_SUFFIX}"
+    - export DOCKER_IMAGE=${CI_REGISTRY_IMAGE}/${IMAGE_SUFFIX}
+    - echo "DOCKER_IMAGE=${DOCKER_IMAGE}"
+  script:
+    - docker pull $DOCKER_IMAGE:stable || true
+    - >
+      docker build
+      --pull
+      --cache-from $DOCKER_IMAGE:latest
+      --tag $DOCKER_IMAGE:latest
+      --tag $DOCKER_IMAGE:ubuntu2204
+      .
+    - docker push $DOCKER_IMAGE:latest
+    - docker push $DOCKER_IMAGE:ubuntu2204

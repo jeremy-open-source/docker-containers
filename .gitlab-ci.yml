@@ -30,6 +30,19 @@ command-loop:
     - changes:
         - command-loop/**/*
 
+esp-stack-trace-decoder:
+  stage: child-pipelines
+  variables:
+    CHILD_PIPELINE_EXECUTION_CONTEXT: "esp-stack-trace-decoder"
+  trigger:
+    include: .sub-gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "esp-stack-trace-decoder"
+    - changes:
+        - esp-stack-trace-decoder/**/*
+
 platformio:
   stage: child-pipelines
   variables:

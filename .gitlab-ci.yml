@@ -4,15 +4,54 @@ services:
 stages:
   - child-pipelines
 
-ansible-docker:
+ansible:
   stage: child-pipelines
   variables:
-    CHILD_PIPELINE_EXECUTION_CONTEXT: "ansible-docker"
+    CHILD_PIPELINE_EXECUTION_CONTEXT: "ansible"
   trigger:
     include: .sub-gitlab-ci.yml
     strategy: depend
   rules:
     - if: $SERVICE == "all"
-    - if: $SERVICE == "ansible-docker"
+    - if: $SERVICE == "ansible"
     - changes:
-        - ansible-docker/**/*
+        - ansible/**/*
+
+command-loop:
+  stage: child-pipelines
+  variables:
+    CHILD_PIPELINE_EXECUTION_CONTEXT: "command-loop"
+  trigger:
+    include: .sub-gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "command-loop"
+    - changes:
+        - command-loop/**/*
+
+platformio:
+  stage: child-pipelines
+  variables:
+    CHILD_PIPELINE_EXECUTION_CONTEXT: "platformio"
+  trigger:
+    include: .sub-gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "platformio"
+    - changes:
+        - platformio/**/*
+
+terraform:
+  stage: child-pipelines
+  variables:
+    CHILD_PIPELINE_EXECUTION_CONTEXT: "terraform"
+  trigger:
+    include: .sub-gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "terraform"
+    - changes:
+        - terraform/**/*

@@ -43,6 +43,19 @@ esp-stack-trace-decoder:
     - changes:
         - esp-stack-trace-decoder/**/*
 
+htmlq:
+  stage: child-pipelines
+  variables:
+    CHILD_PIPELINE_EXECUTION_CONTEXT: "htmlq"
+  trigger:
+    include: .sub-gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "htmlq"
+    - changes:
+        - htmlq/**/*
+
 platformio:
   stage: child-pipelines
   variables:

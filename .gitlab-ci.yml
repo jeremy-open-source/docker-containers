@@ -30,19 +30,6 @@ command-loop:
     - changes:
         - command-loop/**/*
 
-cura:
-  stage: child-pipelines
-  variables:
-    CHILD_PIPELINE_EXECUTION_CONTEXT: "cura"
-  trigger:
-    include: .sub-gitlab-ci.yml
-    strategy: depend
-  rules:
-    - if: $SERVICE == "all"
-    - if: $SERVICE == "cura"
-    - changes:
-        - cura/**/*
-
 esp-stack-trace-decoder:
   stage: child-pipelines
   variables:

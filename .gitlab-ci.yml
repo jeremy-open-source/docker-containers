@@ -90,5 +90,3 @@ renovate:
     - renovate
   rules:
     - if: $SERVICE == "renovate-run"
-  only:
-    - schedules

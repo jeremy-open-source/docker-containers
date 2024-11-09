@@ -2,6 +2,7 @@ services:
   - docker:dind
 
 stages:
+  - renovate
   - child-pipelines
 
 ansible:
@@ -81,3 +82,13 @@ terraform:
     - if: $SERVICE == "terraform"
     - changes:
         - terraform/**/*
+
+renovate:
+  stage: renovate
+  image: renovate/renovate
+  script:
+    - renovate
+  rules:
+    - if: $SERVICE == "renovate-run"
+  only:
+    - schedules

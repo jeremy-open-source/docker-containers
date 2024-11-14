@@ -83,10 +83,10 @@ terraform:
     - changes:
         - terraform/**/*
 
-renovate:
-  stage: renovate
-  image: renovate/renovate
-  script:
-    - renovate
-  rules:
-    - if: $SERVICE == "renovate-run"
+# renovate:
+#   stage: renovate
+#   image: renovate/renovate
+#   script:
+#     - renovate
+#   rules:
+#     - if: $SERVICE == "renovate-run"

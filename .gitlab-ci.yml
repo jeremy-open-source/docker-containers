@@ -69,6 +69,19 @@ platformio:
     - changes:
         - platformio/**/*
 
+system-utils:
+  stage: child-pipelines
+  variables:
+    CHILD_PIPELINE_EXECUTION_CONTEXT: "system-utils"
+  trigger:
+    include: .sub-gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "system-utils"
+    - changes:
+        - system-utils/**/*
+
 terraform:
   stage: child-pipelines
   variables:

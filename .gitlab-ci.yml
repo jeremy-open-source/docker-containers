@@ -44,6 +44,19 @@ esp-stack-trace-decoder:
     - changes:
         - esp-stack-trace-decoder/**/*
 
+hive-hadoop-aws:
+  stage: child-pipelines
+  variables:
+    CHILD_PIPELINE_EXECUTION_CONTEXT: "hive-hadoop-aws"
+  trigger:
+    include: .sub-gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "hive-hadoop-aws"
+    - changes:
+        - hive-hadoop-aws/**/*
+
 htmlq:
   stage: child-pipelines
   variables:

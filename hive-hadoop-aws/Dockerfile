@@ -2,7 +2,7 @@ FROM maven:3.8.5-openjdk-17 AS builder
 
 WORKDIR /build
 
-COPY services/hive/pom.xml .
+COPY hive/pom.xml .
 
 RUN mvn dependency:copy-dependencies -DoutputDirectory=target/jars
 

@@ -57,6 +57,19 @@ hive-hadoop-aws:
     - changes:
         - hive-hadoop-aws/**/*
 
+jupyter-iceberg:
+  stage: child-pipelines
+  variables:
+    CHILD_PIPELINE_EXECUTION_CONTEXT: "jupyter-iceberg"
+  trigger:
+    include: .sub-gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "jupyter-iceberg"
+    - changes:
+        - jupyter-iceberg/**/*
+
 htmlq:
   stage: child-pipelines
   variables:

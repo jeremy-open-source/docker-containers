@@ -1,21 +1,21 @@
-FROM ubuntu:22.04
+FROM maven:3.8.5-openjdk-17 AS builder
 
-ENV DEBIAN_FRONTEND=noninteractive
+WORKDIR /build
 
-# cmake = required for 'addr-to-line' binary
-RUN     apt-get update \
-    &&  apt-get install -y \
-            cmake \
-            openjdk-8-jre \
-            ca-certificates \
-            curl \
-            make
+COPY services/hive/pom.xml .
 
-# Install Java Jar
-RUN     mkdir -p /opt/esp-stack-trace-decoder/bin/ \
-    &&  chmod 777 -R /opt/esp-stack-trace-decoder \
-    &&  curl -O /opt/littleyoda/EspStackTraceDecoder/EspStackTraceDecoder.jar https://github.com/littleyoda/EspStackTraceDecoder/releases/download/untagged-59a763238a6cedfe0362/EspStackTraceDecoder.jar
+RUN mvn dependency:copy-dependencies -DoutputDirectory=target/jars
 
-ADD bin /opt/esp-stack-trace-decoder/bin
+FROM apache/hive:3.1.3
 
-ENV PATH /opt/esp-stack-trace-decoder/bin:$PATH
+ENV HIVE_AUX_JARS_PATH=/opt/hive/lib/ext
+
+USER root
+
+RUN mkdir -p /opt/hive/lib/ext
+
+USER hive
+
+# COPY --from=builder /build/target/jars /opt/hive/lib/ext
+COPY --from=builder /build/target/jars/hadoop-aws-3.2.2.jar /opt/hive/lib/ext/
+COPY --from=builder /build/target/jars/aws-java-sdk-bundle-1.11.1026.jar /opt/hive/lib/ext/

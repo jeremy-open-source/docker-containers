@@ -10,6 +10,11 @@ export HOME
 : "${XDG_CACHE_HOME:=${HOME}/.cache}"
 export XDG_CONFIG_HOME XDG_CACHE_HOME
 
+# Avoid javaws trying to execute /usr/bin/xprop via GNOME ATK bridge
+export NO_AT_BRIDGE=1
+JAVA_TOOL_OPTIONS="${JAVA_TOOL_OPTIONS:-} -Djavax.accessibility.assistive_technologies="
+export JAVA_TOOL_OPTIONS
+
 # Create HOME and icedtea-web expected dirs so it doesn't resolve to '?/...'
 mkdir -p "${HOME}" \
          "${XDG_CONFIG_HOME}/icedtea-web/security" \

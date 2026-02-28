@@ -1,7 +1,12 @@
 # Supermicro IPMI JavaWS (iKVM)
 
 Quick vibe coded, dockerized `javaws` launcher for legacy Supermicro/ATEN IPMI KVM consoles.
+
 Use at your own risk!
+
+This is my attempt at getting the IPMI working on my Supermicro X10SRA-F.
+
+STATUS: Not working. It appears to run, but I get a "No Signal" error.
 
 This container is intended for old BMC firmwares that still require:
 - Java Web Start (`.jnlp`)

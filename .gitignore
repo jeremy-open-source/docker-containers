@@ -1,2 +1,5 @@
 # Ignore editor files
 .idea
+*.jnlp
+jawaws/home/
+javaws/?/

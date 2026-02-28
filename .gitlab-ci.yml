@@ -83,6 +83,19 @@ htmlq:
     - changes:
         - htmlq/**/*
 
+jawaws:
+  stage: child-pipelines
+  variables:
+    CHILD_PIPELINE_EXECUTION_CONTEXT: "jawaws"
+  trigger:
+    include: .sub-gitlab-ci.yml
+    strategy: depend
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "jawaws"
+    - changes:
+        - jawaws/**/*
+
 platformio:
   stage: child-pipelines
   variables:

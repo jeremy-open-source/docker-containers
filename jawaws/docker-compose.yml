@@ -1,0 +1,13 @@
+services:
+  app:
+    build: .
+    network_mode: "host"
+    environment:
+      - DISPLAY
+      - HOME=/work/home
+      - XDG_CONFIG_HOME=/work/home/.config
+      - XDG_CACHE_HOME=/work/home/.cache
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - .:/work
+    user: "${CURRENT_UID:-1000}:${CURRENT_GID:-1000}"

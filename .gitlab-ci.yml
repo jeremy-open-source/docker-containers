@@ -18,6 +18,20 @@ command-loop:
     - changes:
         - command-loop/**/*
 
+# minio_mc/.gitlab-ci.yml
+minio_mc:
+  stage: child-pipelines
+  trigger:
+    include: minio_mc/.gitlab-ci.yml
+    strategy: depend
+    variables:
+      SERVICE_DIR: minio_mc
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "minio_mc"
+    - changes:
+        - minio_mc/**/*
+
 # ansible/.gitlab-ci.yml
 ansible:
   stage: child-pipelines

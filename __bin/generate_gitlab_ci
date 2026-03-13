@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Base directory (where the script is located)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BASE_DIR="$(dirname "$SCRIPT_DIR")"
+OUTPUT_FILE="$BASE_DIR/.gitlab-ci.yml"
+
+# Header
+cat > "$OUTPUT_FILE" <<EOF
+services:
+  - docker:dind
+
+stages:
+  - child-pipelines
+
+EOF
+
+# Find all .gitlab-ci.yml files, skipping directories that start with "_"
+find "$BASE_DIR" \
+  -type d -name "_*" -prune -false -o \
+  -type f -name ".gitlab-ci.yml" ! -path "$BASE_DIR/.gitlab-ci.yml" | while read -r filepath; do
+
+  # Relative path like: some-dir/.gitlab-ci.yml
+  relative_path="${filepath#$BASE_DIR/}"
+
+  # Service path: strip /.gitlab-ci.yml
+  service_path="${relative_path%/.gitlab-ci.yml}"
+
+  # Job name: service path with slashes replaced by dashes
+  job_name="${service_path//\//-}"
+
+  cat >> "$OUTPUT_FILE" <<EOF
+# $relative_path
+$job_name:
+  stage: child-pipelines
+  trigger:
+    include: $relative_path
+    strategy: depend
+    variables:
+      SERVICE_DIR: $service_path
+  rules:
+    - if: \$SERVICE == "all"
+    - if: \$SERVICE == "$service_path"
+    - changes:
+        - $service_path/**/*
+
+EOF
+done
+
+echo "✅ Generated: $OUTPUT_FILE"

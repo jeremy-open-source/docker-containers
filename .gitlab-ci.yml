@@ -2,143 +2,173 @@ services:
   - docker:dind
 
 stages:
-  - renovate
   - child-pipelines
 
-ansible:
-  stage: child-pipelines
-  variables:
-    CHILD_PIPELINE_EXECUTION_CONTEXT: "ansible"
-  trigger:
-    include: .sub-gitlab-ci.yml
-    strategy: depend
-  rules:
-    - if: $SERVICE == "all"
-    - if: $SERVICE == "ansible"
-    - changes:
-        - ansible/**/*
-
+# command-loop/.gitlab-ci.yml
 command-loop:
   stage: child-pipelines
-  variables:
-    CHILD_PIPELINE_EXECUTION_CONTEXT: "command-loop"
   trigger:
-    include: .sub-gitlab-ci.yml
+    include: command-loop/.gitlab-ci.yml
     strategy: depend
+    variables:
+      SERVICE_DIR: command-loop
   rules:
     - if: $SERVICE == "all"
     - if: $SERVICE == "command-loop"
     - changes:
         - command-loop/**/*
 
-esp-stack-trace-decoder:
+# ansible/.gitlab-ci.yml
+ansible:
   stage: child-pipelines
-  variables:
-    CHILD_PIPELINE_EXECUTION_CONTEXT: "esp-stack-trace-decoder"
   trigger:
-    include: .sub-gitlab-ci.yml
+    include: ansible/.gitlab-ci.yml
     strategy: depend
+    variables:
+      SERVICE_DIR: ansible
   rules:
     - if: $SERVICE == "all"
-    - if: $SERVICE == "esp-stack-trace-decoder"
+    - if: $SERVICE == "ansible"
     - changes:
-        - esp-stack-trace-decoder/**/*
+        - ansible/**/*
 
-hive-hadoop-aws:
-  stage: child-pipelines
-  variables:
-    CHILD_PIPELINE_EXECUTION_CONTEXT: "hive-hadoop-aws"
-  trigger:
-    include: .sub-gitlab-ci.yml
-    strategy: depend
-  rules:
-    - if: $SERVICE == "all"
-    - if: $SERVICE == "hive-hadoop-aws"
-    - changes:
-        - hive-hadoop-aws/**/*
-
-jupyter-iceberg:
-  stage: child-pipelines
-  variables:
-    CHILD_PIPELINE_EXECUTION_CONTEXT: "jupyter-iceberg"
-  trigger:
-    include: .sub-gitlab-ci.yml
-    strategy: depend
-  rules:
-    - if: $SERVICE == "all"
-    - if: $SERVICE == "jupyter-iceberg"
-    - changes:
-        - jupyter-iceberg/**/*
-
-htmlq:
-  stage: child-pipelines
-  variables:
-    CHILD_PIPELINE_EXECUTION_CONTEXT: "htmlq"
-  trigger:
-    include: .sub-gitlab-ci.yml
-    strategy: depend
-  rules:
-    - if: $SERVICE == "all"
-    - if: $SERVICE == "htmlq"
-    - changes:
-        - htmlq/**/*
-
-jawaws:
-  stage: child-pipelines
-  variables:
-    CHILD_PIPELINE_EXECUTION_CONTEXT: "jawaws"
-  trigger:
-    include: .sub-gitlab-ci.yml
-    strategy: depend
-  rules:
-    - if: $SERVICE == "all"
-    - if: $SERVICE == "jawaws"
-    - changes:
-        - jawaws/**/*
-
-platformio:
-  stage: child-pipelines
-  variables:
-    CHILD_PIPELINE_EXECUTION_CONTEXT: "platformio"
-  trigger:
-    include: .sub-gitlab-ci.yml
-    strategy: depend
-  rules:
-    - if: $SERVICE == "all"
-    - if: $SERVICE == "platformio"
-    - changes:
-        - platformio/**/*
-
-system-utils:
-  stage: child-pipelines
-  variables:
-    CHILD_PIPELINE_EXECUTION_CONTEXT: "system-utils"
-  trigger:
-    include: .sub-gitlab-ci.yml
-    strategy: depend
-  rules:
-    - if: $SERVICE == "all"
-    - if: $SERVICE == "system-utils"
-    - changes:
-        - system-utils/**/*
-
+# terraform/.gitlab-ci.yml
 terraform:
   stage: child-pipelines
-  variables:
-    CHILD_PIPELINE_EXECUTION_CONTEXT: "terraform"
   trigger:
-    include: .sub-gitlab-ci.yml
+    include: terraform/.gitlab-ci.yml
     strategy: depend
+    variables:
+      SERVICE_DIR: terraform
   rules:
     - if: $SERVICE == "all"
     - if: $SERVICE == "terraform"
     - changes:
         - terraform/**/*
 
-# renovate:
-#   stage: renovate
-#   image: renovate/renovate
-#   script:
-#     - renovate
-#   rules:
-#     - if: $SERVICE == "renovate-run"
+# jawaws/.gitlab-ci.yml
+jawaws:
+  stage: child-pipelines
+  trigger:
+    include: jawaws/.gitlab-ci.yml
+    strategy: depend
+    variables:
+      SERVICE_DIR: jawaws
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "jawaws"
+    - changes:
+        - jawaws/**/*
+
+# platformio/.gitlab-ci.yml
+platformio:
+  stage: child-pipelines
+  trigger:
+    include: platformio/.gitlab-ci.yml
+    strategy: depend
+    variables:
+      SERVICE_DIR: platformio
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "platformio"
+    - changes:
+        - platformio/**/*
+
+# hive-hadoop-aws/.gitlab-ci.yml
+hive-hadoop-aws:
+  stage: child-pipelines
+  trigger:
+    include: hive-hadoop-aws/.gitlab-ci.yml
+    strategy: depend
+    variables:
+      SERVICE_DIR: hive-hadoop-aws
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "hive-hadoop-aws"
+    - changes:
+        - hive-hadoop-aws/**/*
+
+# system-utils/.gitlab-ci.yml
+system-utils:
+  stage: child-pipelines
+  trigger:
+    include: system-utils/.gitlab-ci.yml
+    strategy: depend
+    variables:
+      SERVICE_DIR: system-utils
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "system-utils"
+    - changes:
+        - system-utils/**/*
+
+# jupyter-iceberg/.gitlab-ci.yml
+jupyter-iceberg:
+  stage: child-pipelines
+  trigger:
+    include: jupyter-iceberg/.gitlab-ci.yml
+    strategy: depend
+    variables:
+      SERVICE_DIR: jupyter-iceberg
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "jupyter-iceberg"
+    - changes:
+        - jupyter-iceberg/**/*
+
+# esp-stack-trace-decoder/.gitlab-ci.yml
+esp-stack-trace-decoder:
+  stage: child-pipelines
+  trigger:
+    include: esp-stack-trace-decoder/.gitlab-ci.yml
+    strategy: depend
+    variables:
+      SERVICE_DIR: esp-stack-trace-decoder
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "esp-stack-trace-decoder"
+    - changes:
+        - esp-stack-trace-decoder/**/*
+
+# kubectl/.gitlab-ci.yml
+kubectl:
+  stage: child-pipelines
+  trigger:
+    include: kubectl/.gitlab-ci.yml
+    strategy: depend
+    variables:
+      SERVICE_DIR: kubectl
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "kubectl"
+    - changes:
+        - kubectl/**/*
+
+# htmlq/.gitlab-ci.yml
+htmlq:
+  stage: child-pipelines
+  trigger:
+    include: htmlq/.gitlab-ci.yml
+    strategy: depend
+    variables:
+      SERVICE_DIR: htmlq
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "htmlq"
+    - changes:
+        - htmlq/**/*
+
+# minio/.gitlab-ci.yml
+minio:
+  stage: child-pipelines
+  trigger:
+    include: minio/.gitlab-ci.yml
+    strategy: depend
+    variables:
+      SERVICE_DIR: minio
+  rules:
+    - if: $SERVICE == "all"
+    - if: $SERVICE == "minio"
+    - changes:
+        - minio/**/*
+

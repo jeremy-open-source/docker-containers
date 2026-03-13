@@ -5,7 +5,6 @@ stages:
   - build
 
 variables:
-  SERVICE: system-utils
   DISTRO_TAG: ubuntu2404
 
 build:
@@ -13,6 +12,8 @@ build:
   retry: 0
   image: docker:latest
   before_script:
+    - export SERVICE="${SERVICE_DIR:-$(basename "$(dirname "${CI_CONFIG_PATH}")")}"
+    - echo "SERVICE=${SERVICE}"
     - cd ${SERVICE}
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - export IMAGE_SUFFIX=${SERVICE}

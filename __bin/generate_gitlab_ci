@@ -35,11 +35,11 @@ find "$BASE_DIR" \
 # $relative_path
 $job_name:
   stage: child-pipelines
+  variables:
+    SERVICE_DIR: $service_path
   trigger:
     include: $relative_path
     strategy: depend
-    variables:
-      SERVICE_DIR: $service_path
   rules:
     - if: \$SERVICE == "all"
     - if: \$SERVICE == "$service_path"
